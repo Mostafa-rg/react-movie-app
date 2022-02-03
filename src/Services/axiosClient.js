@@ -3,10 +3,9 @@ import queryString from "query-string"
 
 
 import apiConfig from "./apiConfig";
-import queryString from 'query-string'
 
 const axiosClient = axios.create({
-    BASE_URL: apiConfig.BASE_URL,
+    baseURL: apiConfig.baseURL,
     headers:{
         'Content-Type': 'application.json'
     },
@@ -14,7 +13,7 @@ const axiosClient = axios.create({
     paramsSerializer: params => queryString.stringify({...params, api_key: apiConfig.apiKey})
 });
 
-axiosClient.interceptors.use(async config => config)
+axiosClient.interceptors.request.use(async config => config)
 
 axiosClient.interceptors.response.use(response => {
     if(response && response.data) {
