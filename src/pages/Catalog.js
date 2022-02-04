@@ -1,24 +1,29 @@
 import React from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 //Components
 import PageHeader from '../components/page-header/PageHeader';
-
+import MovieGrid from '../components/movie-grid/MovieGrid';
 
 //Api
-import { category as cate} from '../Services/tmdbApi'
+import { category as cate} from '../Services/tmdbApi';
 
 const Catalog = () => {
 
     const { category } = useParams();
 
-    console.log(category)
+    // console.log(category)
     return (
         <>
             <PageHeader>
                 {category === cate.movie ? 'Movies' : 'Tv Series'}
             </PageHeader>
+            <div className='container'>
+                <div className='section mb-3'>
+                    <MovieGrid category={category}/>
+                </div>
+            </div>
         </>
     );
 };
