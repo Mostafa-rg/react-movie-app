@@ -10,6 +10,7 @@ import {Swiper, SwiperSlide } from 'swiper/react'
 
 //Components
 import Button from '../button/Button';
+import MovieCard from '../movie-card/MovieCard';
 
 //Api
 import apiConfig from '../../Services/apiConfig';
@@ -52,7 +53,7 @@ const MovieList = props => {
                 {
                     items.map((item, index) => (
                         <SwiperSlide key={index}>
-                            <img src={apiConfig.w500Image(item.poster_path)} alt=''/>
+                            <MovieCard item={item} category={props.category}/>
                         </SwiperSlide>
                     ))
                 }

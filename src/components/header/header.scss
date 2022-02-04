@@ -27,7 +27,7 @@
     z-index: 99;
     transition: height .3s ease, background-color .3s ease;
 
-    &shrink{
+    &.shrink{
         height: $header-shrink-height;
         background-color: $body-bg;
     }
