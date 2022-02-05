@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
 //Styles
 import './movie-grid.scss';
@@ -7,7 +7,8 @@ import './movie-grid.scss';
 //Components
 import MovieCard from '../movie-card/MovieCard'
 import tmdbApi, { category ,movieType, tvType } from '../../Services/tmdbApi';
-import { OutlineButton } from '../button/Button';
+import Button, { OutlineButton } from '../button/Button';
+import Input from '../input/Input';
 
 const MovieGrid = props => {
 
@@ -16,8 +17,6 @@ const MovieGrid = props => {
     const [totalPage, setTotalPage] = useState(0);
 
     const { keyword } = useParams();
-
-    console.log(typeof(props.category))
 
     useEffect(() => {
         const getList = async () => {
@@ -74,6 +73,9 @@ const MovieGrid = props => {
 
     return (
         <>
+            <div className='section mb-3'>
+                <MovieSearch category={props.category} keyword={keyword}/>
+            </div>
             <div className='movie-grid'>
             {
                 items.map((item, index) => <MovieCard category={props.category} item={item} key={index}/>)
@@ -91,4 +93,45 @@ const MovieGrid = props => {
     );
 };
 
+const MovieSearch = props => {
+
+    const history = useHistory();
+
+    const [keyword, setKeyword] = useState(props.keyword ? props.keyword : '');
+
+    const goToSearch = useCallback(
+        () => {
+            if (keyword.trim().length > 0) {
+                history.push(`/${category[props.category]}/search/${keyword}`);
+            }
+        },
+        [keyword, props.category, history]
+    );
+
+    useEffect(() =>{
+        const enterEvent = event => {
+            event.preventDefault();
+
+            if(event.keyCode === 13){
+                goToSearch();
+            }
+        }
+
+        document.addEventListener('keyup', enterEvent);
+        return () => {
+            document.addEventListener('keyup', enterEvent);
+        };
+    }, [goToSearch, keyword])
+    return(
+        <div className='movie-search'>
+            <Input
+                type="text"
+                placeholder="Enter keyword"
+                value={keyword}
+                onChange={event => setKeyword(event.target.value)}
+            />
+            <Button className='small' onClick={goToSearch}>Search</Button>
+        </div>
+    )
+}
 export default MovieGrid;
